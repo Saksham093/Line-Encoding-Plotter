@@ -185,10 +185,29 @@ def setTurtle(size, colour, speed, visibility):
         t.hideturtle()
 
 
-print('Input Signal to be plotted (1s and 0s)')
-signal = input()
-print('\nEncode in format:\n1. NRZ-I\n2. NRZ-L\n3. RZ\n4. Manchester\n5. Diff Manchester\n')
-encoding = input()
+print('|--------------------Line Code Simulator--------------------|')
+
+# Condition for the Input of the Signal...
+while True:
+    signal = str(input('Input Signal to be Plotted (1s and 0s) : '))
+    ls = map(lambda x: x in {'0', '1'}, signal)
+
+    if False in ls:
+        print("\nInvalid Input Try Again.\n")
+        continue
+    
+    break
+
+
+# To avoid Error if Encoding not in the list...
+print('\nEncode in Format:\n1. NRZ-I\n2. NRZ-L\n3. RZ\n4. Manchester\n5. Diff Manchester ...\n')
+while True:
+    encoding = str(input("\nEnter Int Value from the List : "))
+    if encoding not in ['1', '2', '3', '4', '5']:
+        print("\nInvalid Input Type...Retry")
+        continue
+
+    break
 
 root = tk.Tk()
 root.title('Signal Graph')
@@ -196,11 +215,11 @@ root.geometry('1000x300')
 cv = turtle.ScrolledCanvas(root, width=1000)  # turn Canvas to ScrolledCanvas if signals long
 cv.pack()
 
-len_X, len_Y = 5000, 350
+len_X, len_Y = 200*len(signal), 350
 default_settings = (2, 'red', 'slowest', False)
 invisiline = (1, 'black', 'fastest', False)
-map = {'NRZ-I': NRZ_I(signal), 'NRZ-L': NRZ_L(signal), 'RZ': RZ(signal), 'Manchester': Manchester(signal),
-       'Diff Manchester': diff_Manchester(signal)}
+map = {'1': NRZ_I(signal), '2': NRZ_L(signal), '3': RZ(signal), '4': Manchester(signal),
+       '5': diff_Manchester(signal)}
 
 screen = turtle.TurtleScreen(cv)
 screen.screensize(len_X, len_Y)
@@ -208,6 +227,8 @@ t = turtle.RawTurtle(screen)
 
 drawAxes()
 setTurtle(*default_settings)
+
+print('\nDrawing Signal ...')
 map[encoding].draw()
 
 root.mainloop()
